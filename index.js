@@ -1,3 +1,10 @@
+let upgradeData = [];
+
+const mainCombinations = [
+    "0-0", "1-0", "2-0", "3-0", "4-0",
+    "0-1", "0-2", "0-3", "0-4"
+];
+
 const combinations = [
     "0-0",
     "0-1", "0-2", "0-3", "0-4",
@@ -6,6 +13,17 @@ const combinations = [
     "3-0", "3-1", "3-2",
     "4-0", "4-1", "4-2"
 ];
+
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charactersLength);
+        result += characters.charAt(randomIndex);
+    }
+    return result;
+}
 
 function getUpgradeStats(upgrade) {
     return {
@@ -23,6 +41,7 @@ function round(value) {
 function calculateUpgrades() {
     const upgradesOutput = document.getElementById("upgrades-output");
     upgradesOutput.innerHTML = "";
+    upgradeData = [];
 
     combinations.forEach(comb => {
         const [top, bottom] = comb.split("-").map(Number);
@@ -77,5 +96,69 @@ function calculateUpgrades() {
         }
 
         upgradesOutput.innerHTML += combinationHTML;
+
+        upgradeData.push({
+            combination: comb,
+            topPathPrice: round(upgradePriceTop),
+            bottomPathPrice: round(upgradePriceBottom),
+            totalPrice: round(totalStats.price),
+            range: round(totalStats.range),
+            damage: round(totalStats.damage),
+            cooldown: round(totalStats.cooldown)
+        });
     });
+
+    document.getElementById("results").scrollIntoView();
+}
+
+function exportFile() {
+    let text = "";
+    mainCombinations.forEach(upgrade => {
+        const stats = getUpgradeStats(upgrade);
+        text += `${upgrade}:\n`;
+        text += `  Price: ${round(stats.price)}\n`;
+        text += `  Range: ${round(stats.range)}\n`;
+        text += `  Damage: ${round(stats.damage)}\n`;
+        text += `  Cooldown: ${round(stats.cooldown)}\n\n`;
+    });
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `towerPaths-${generateRandomString(8)}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+const fileInput = document.getElementById("fileInput");
+
+function importFile() {
+    const file = fileInput.files[0];
+    if (!file) {
+        alert("Please import a valid .txt file.") 
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const content = event.target.result;
+        const lines = content.split("\n");
+        let currentUpgrade = "";
+
+        lines.forEach(line => {
+            const matchUpgrade = line.match(/^(\d-\d):$/);
+            const matchStat = line.match(/^\s+(Price|Range|Damage|Cooldown):\s+([\d.]+)/);
+
+            if (matchUpgrade) {
+                currentUpgrade = matchUpgrade[1];
+            } else if (matchStat && mainCombinations.includes(currentUpgrade)) {
+                const stat = matchStat[1].toLowerCase();
+                const value = parseFloat(matchStat[2]);
+
+                document.getElementById(`${stat}-${currentUpgrade}`).value = value;
+            }
+        });
+    };
+    reader.readAsText(file);
 }

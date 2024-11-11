@@ -15,6 +15,15 @@
     <h1>Tower Path Combination Calculator</h1>
     <p>Made by coreyhsGames and for Retro Defense.</p>
 
+    <button onclick="calculateUpgrades()">Calculate Combinations</button>
+    <br>
+    <br>
+    <button onclick="importFile()">Import (.txt)</button>
+    <input type="file" id="fileInput" accept=".txt">
+    <br>
+    <br>
+    <button onclick="exportFile()">Export (.txt)</button>
+
     <!-- Upgrade Inputs -->
     <div id="upgrade-inputs">
       <div class="upgrade-input">
@@ -219,8 +228,6 @@
           </div>
         </div>
       </div>
-
-      <button onclick="calculateUpgrades()">Calculate Combinations</button>
     </div>
 
     <!-- Display results -->
