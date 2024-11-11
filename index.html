@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <script defer src="index.js"></script>
+  <title>Tower Path Combination Calculator</title>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Tower Path Combination Calculator</h1>
+    <p>Made by coreyhsGames and for Retro Defense.</p>
+
+    <!-- Upgrade Inputs -->
+    <div id="upgrade-inputs">
+      <div class="upgrade-input">
+        <h2>Base Stats:</h2>
+        <label>Stats for 0-0:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-0-0">Price:</label>
+            <input type="number" id="price-0-0" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-0-0">Range:</label>
+            <input type="number" id="range-0-0" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-0-0">Damage:</label>
+            <input type="number" id="damage-0-0" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-0-0">Cooldown:</label>
+            <input type="number" id="cooldown-0-0" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Path Inputs -->
+      <h2>Top Path:</h2>
+      <div class="upgrade-input">
+        <label>Stats for 1-0:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-1-0">Price:</label>
+            <input type="number" id="price-1-0" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-1-0">Range:</label>
+            <input type="number" id="range-1-0" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-1-0">Damage:</label>
+            <input type="number" id="damage-1-0" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-1-0">Cooldown:</label>
+            <input type="number" id="cooldown-1-0" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 2-0:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-2-0">Price:</label>
+            <input type="number" id="price-2-0" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-2-0">Range:</label>
+            <input type="number" id="range-2-0" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-2-0">Damage:</label>
+            <input type="number" id="damage-2-0" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-2-0">Cooldown:</label>
+            <input type="number" id="cooldown-2-0" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 3-0:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-3-0">Price:</label>
+            <input type="number" id="price-3-0" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-3-0">Range:</label>
+            <input type="number" id="range-3-0" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-3-0">Damage:</label>
+            <input type="number" id="damage-3-0" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-3-0">Cooldown:</label>
+            <input type="number" id="cooldown-3-0" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 4-0:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-4-0">Price:</label>
+            <input type="number" id="price-4-0" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-4-0">Range:</label>
+            <input type="number" id="range-4-0" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-4-0">Damage:</label>
+            <input type="number" id="damage-4-0" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-4-0">Cooldown:</label>
+            <input type="number" id="cooldown-4-0" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Path Inputs -->
+      <h2>Bottom Path:</h2>
+      <div class="upgrade-input">
+        <label>Stats for 0-1:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-0-1">Price:</label>
+            <input type="number" id="price-0-1" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-0-1">Range:</label>
+            <input type="number" id="range-0-1" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-0-1">Damage:</label>
+            <input type="number" id="damage-0-1" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-0-1">Cooldown:</label>
+            <input type="number" id="cooldown-0-1" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 0-2:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-0-2">Price:</label>
+            <input type="number" id="price-0-2" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-0-2">Range:</label>
+            <input type="number" id="range-0-2" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-0-2">Damage:</label>
+            <input type="number" id="damage-0-2" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-0-2">Cooldown:</label>
+            <input type="number" id="cooldown-0-2" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 0-3:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-0-3">Price:</label>
+            <input type="number" id="price-0-3" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-0-3">Range:</label>
+            <input type="number" id="range-0-3" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-0-3">Damage:</label>
+            <input type="number" id="damage-0-3" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-0-3">Cooldown:</label>
+            <input type="number" id="cooldown-0-3" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="upgrade-input">
+        <label>Stats for 0-4:</label>
+        <div class="stat-inputs">
+          <div>
+            <label for="price-0-4">Price:</label>
+            <input type="number" id="price-0-4" placeholder="Price" value="0">
+          </div>
+          <div>
+            <label for="range-0-4">Range:</label>
+            <input type="number" id="range-0-4" placeholder="Range" value="0">
+          </div>
+          <div>
+            <label for="damage-0-4">Damage:</label>
+            <input type="number" id="damage-0-4" placeholder="Damage" value="0">
+          </div>
+          <div>
+            <label for="cooldown-0-4">Cooldown:</label>
+            <input type="number" id="cooldown-0-4" placeholder="Cooldown" value="0">
+          </div>
+        </div>
+      </div>
+
+      <button onclick="calculateUpgrades()">Calculate Combinations</button>
+    </div>
+
+    <!-- Display results -->
+    <div id="results" class="result">
+      <h2>Upgrade Combinations:</h2>
+      <div id="upgrades-output"></div>
+    </div>
+  </div>
+</body>
+
+</html>
