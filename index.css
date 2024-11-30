@@ -14,12 +14,103 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     width: 100%;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     background-color: #1f1f1f;
+}
+
+.container#upgrades-container {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    gap: 15px;
+    grid-template-areas:
+        "zero-zero zero-zero zero-zero zero-zero"
+        "one-zero two-zero three-zero four-zero"
+        "zero-one zero-two zero-three zero-four";
+    justify-content: center;
+}
+
+.card {
+    background-color: #1f1f1f;
+    border-radius: 8px;
+    padding: 15px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin: 8px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 18px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.card .stat-input {
+    margin-bottom: 10px;
+}
+
+.card .stat-input label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #f1f1f1;
+}
+
+.card .stat-input input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+}
+
+.card .stat-input input:focus {
+    border-color: #6a0dad;
+    /* Purple focus color */
+    outline: none;
+}
+
+.card.zero-zero {
+    grid-area: zero-zero;
+}
+
+.card.one-zero {
+    grid-area: one-zero;
+}
+
+.card.two-zero {
+    grid-area: two-zero;
+}
+
+.card.three-zero {
+    grid-area: three-zero;
+}
+
+.card.four-zero {
+    grid-area: four-zero;
+}
+
+.card.zero-one {
+    grid-area: zero-one;
+}
+
+.card.zero-two {
+    grid-area: zero-two;
+}
+
+.card.zero-three {
+    grid-area: zero-three;
+}
+
+.card.zero-four {
+    grid-area: zero-four;
 }
 
 h1 {

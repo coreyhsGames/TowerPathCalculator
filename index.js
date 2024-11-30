@@ -5,6 +5,11 @@ const mainCombinations = [
     "0-1", "0-2", "0-3", "0-4"
 ];
 
+const gridAreas = [
+    "zero-zero", "one-zero", "two-zero", "three-zero", "four-zero",
+    "zero-one", "zero-two", "zero-three", "zero-four"
+];
+
 const combinations = [
     "0-0",
     "0-1", "0-2", "0-3", "0-4",
@@ -13,6 +18,36 @@ const combinations = [
     "3-0", "3-1", "3-2",
     "4-0", "4-1", "4-2"
 ];
+
+function createUpgradeCards() {
+    const container = document.getElementById("upgrades-container");
+    mainCombinations.forEach((upgrade, index) => {
+        const card = document.createElement("div");
+        card.className = `card ${gridAreas[index]}`;
+        card.innerHTML = `
+        <h2>Upgrade ${upgrade}</h2>
+        <div class="stat-input">
+          <label for="price-${upgrade}">Price</label>
+          <input type="number" id="price-${upgrade}" value="0">
+        </div>
+        <div class="stat-input">
+          <label for="range-${upgrade}">Range</label>
+          <input type="number" id="range-${upgrade}" value="0">
+        </div>
+        <div class="stat-input">
+          <label for="damage-${upgrade}">Damage</label>
+          <input type="number" id="damage-${upgrade}" value="0">
+        </div>
+        <div class="stat-input">
+          <label for="cooldown-${upgrade}">Cooldown</label>
+          <input type="number" id="cooldown-${upgrade}" value="0">
+        </div>
+      `;
+        container.appendChild(card);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", createUpgradeCards);
 
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -48,27 +83,50 @@ function calculateUpgrades() {
         let totalStats = { price: 0, totalPrice: 0, range: 0, damage: 0, cooldown: 0 };
         let upgradePriceTop = 0, upgradePriceBottom = 0;
 
+        // Get initial stats for 0-0 and assign them directly to totalStats
+        const zeroZeroStats = getUpgradeStats("0-0");
+        totalStats.price = zeroZeroStats.price;
+        totalStats.totalPrice = zeroZeroStats.price; // Total price starts with 0-0 price
+        totalStats.range = zeroZeroStats.range;
+        totalStats.damage = zeroZeroStats.damage;
+        totalStats.cooldown = zeroZeroStats.cooldown;
+
         // Calculate total for top path
-        for (let i = 0; i <= top; i++) {
+        let prevTopStats = { ...zeroZeroStats }; // Initialize with 0-0 stats
+        for (let i = 1; i <= top; i++) { // Start from 1 since 0-0 is already included
             const currentStats = getUpgradeStats(`${i}-0`);
             totalStats.price = currentStats.price;
             totalStats.totalPrice += currentStats.price;
-            totalStats.range += currentStats.range;
-            totalStats.damage += currentStats.damage;
-            totalStats.cooldown += currentStats.cooldown;
+
+            // Add only the difference between current and previous stats
+            totalStats.range += currentStats.range - prevTopStats.range;
+            totalStats.damage += currentStats.damage - prevTopStats.damage;
+            totalStats.cooldown += currentStats.cooldown - prevTopStats.cooldown;
+
+            // Update previous stats
+            prevTopStats = { ...currentStats };
+
             if (i === top) upgradePriceTop = currentStats.price; // Only the price of the top path upgrade at this level
         }
 
         // Calculate total for bottom path
-        for (let i = 1; i <= bottom; i++) {
+        let prevBottomStats = { ...zeroZeroStats }; // Initialize with 0-0 stats
+        for (let i = 1; i <= bottom; i++) { // Start from 1 since 0-0 is already included
             const currentStats = getUpgradeStats(`0-${i}`);
             totalStats.price = currentStats.price;
             totalStats.totalPrice += currentStats.price;
-            totalStats.range += currentStats.range;
-            totalStats.damage += currentStats.damage;
-            totalStats.cooldown += currentStats.cooldown;
+
+            // Add only the difference between current and previous stats
+            totalStats.range += currentStats.range - prevBottomStats.range;
+            totalStats.damage += currentStats.damage - prevBottomStats.damage;
+            totalStats.cooldown += currentStats.cooldown - prevBottomStats.cooldown;
+
+            // Update previous stats
+            prevBottomStats = { ...currentStats };
+
             if (i === bottom) upgradePriceBottom = currentStats.price; // Only the price of the bottom path upgrade at this level
         }
+
 
         let combinationHTML = ``;
         if (top >= 1 && bottom >= 1) {
@@ -136,7 +194,7 @@ const fileInput = document.getElementById("fileInput");
 function importFile() {
     const file = fileInput.files[0];
     if (!file) {
-        alert("Please import a valid .txt file.") 
+        alert("Please import a valid .txt file.")
         return;
     }
 
