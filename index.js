@@ -42,11 +42,14 @@ function createUpgradeCards() {
           <label for="cooldown-${upgrade}">Cooldown</label>
           <input type="number" id="cooldown-${upgrade}" value="0">
         </div>
+        <div class="stat-input">
+          <label for="splash-${upgrade}">Splash Radius</label>
+          <input type="number" id="splash-${upgrade}" value="0">
+        </div>
       `;
         container.appendChild(card);
     });
 }
-
 document.addEventListener("DOMContentLoaded", createUpgradeCards);
 
 function generateRandomString(length) {
@@ -65,7 +68,8 @@ function getUpgradeStats(upgrade) {
         price: parseFloat(document.getElementById(`price-${upgrade}`).value) || 0,
         range: parseFloat(document.getElementById(`range-${upgrade}`).value) || 0,
         damage: parseFloat(document.getElementById(`damage-${upgrade}`).value) || 0,
-        cooldown: parseFloat(document.getElementById(`cooldown-${upgrade}`).value) || 0
+        cooldown: parseFloat(document.getElementById(`cooldown-${upgrade}`).value) || 0,
+        splash: parseFloat(document.getElementById(`splash-${upgrade}`).value) || 0
     };
 }
 
@@ -80,53 +84,50 @@ function calculateUpgrades() {
 
     combinations.forEach(comb => {
         const [top, bottom] = comb.split("-").map(Number);
-        let totalStats = { price: 0, totalPrice: 0, range: 0, damage: 0, cooldown: 0 };
+        let totalStats = { price: 0, totalPrice: 0, range: 0, damage: 0, cooldown: 0, splash: 0 };
         let upgradePriceTop = 0, upgradePriceBottom = 0;
 
-        // Get initial stats for 0-0 and assign them directly to totalStats
         const zeroZeroStats = getUpgradeStats("0-0");
         totalStats.price = zeroZeroStats.price;
-        totalStats.totalPrice = zeroZeroStats.price; // Total price starts with 0-0 price
+        totalStats.totalPrice = zeroZeroStats.price;
         totalStats.range = zeroZeroStats.range;
         totalStats.damage = zeroZeroStats.damage;
         totalStats.cooldown = zeroZeroStats.cooldown;
+        totalStats.splash = zeroZeroStats.splash;
 
-        // Calculate total for top path
-        let prevTopStats = { ...zeroZeroStats }; // Initialize with 0-0 stats
-        for (let i = 1; i <= top; i++) { // Start from 1 since 0-0 is already included
+        // Top path
+        let prevTopStats = { ...zeroZeroStats };
+        for (let i = 1; i <= top; i++) {
             const currentStats = getUpgradeStats(`${i}-0`);
             totalStats.price = currentStats.price;
             totalStats.totalPrice += currentStats.price;
 
-            // Add only the difference between current and previous stats
             totalStats.range += currentStats.range - prevTopStats.range;
             totalStats.damage += currentStats.damage - prevTopStats.damage;
             totalStats.cooldown += currentStats.cooldown - prevTopStats.cooldown;
+            totalStats.splash += currentStats.splash - prevTopStats.splash;
 
-            // Update previous stats
             prevTopStats = { ...currentStats };
 
-            if (i === top) upgradePriceTop = currentStats.price; // Only the price of the top path upgrade at this level
+            if (i === top) upgradePriceTop = currentStats.price;
         }
 
-        // Calculate total for bottom path
-        let prevBottomStats = { ...zeroZeroStats }; // Initialize with 0-0 stats
-        for (let i = 1; i <= bottom; i++) { // Start from 1 since 0-0 is already included
+        // Bottom path
+        let prevBottomStats = { ...zeroZeroStats };
+        for (let i = 1; i <= bottom; i++) {
             const currentStats = getUpgradeStats(`0-${i}`);
             totalStats.price = currentStats.price;
             totalStats.totalPrice += currentStats.price;
 
-            // Add only the difference between current and previous stats
             totalStats.range += currentStats.range - prevBottomStats.range;
             totalStats.damage += currentStats.damage - prevBottomStats.damage;
             totalStats.cooldown += currentStats.cooldown - prevBottomStats.cooldown;
+            totalStats.splash += currentStats.splash - prevBottomStats.splash;
 
-            // Update previous stats
             prevBottomStats = { ...currentStats };
 
-            if (i === bottom) upgradePriceBottom = currentStats.price; // Only the price of the bottom path upgrade at this level
+            if (i === bottom) upgradePriceBottom = currentStats.price;
         }
-
 
         let combinationHTML = ``;
         if (top >= 1 && bottom >= 1) {
@@ -138,10 +139,10 @@ function calculateUpgrades() {
             <p>Range: ${round(totalStats.range)}</p>
             <p>Damage: ${round(totalStats.damage)}</p>
             <p>Cooldown: ${round(totalStats.cooldown)}</p>
+            <p>Splash Radius: ${round(totalStats.splash)}</p>
             <hr>
             `;
-        }
-        else {
+        } else {
             combinationHTML = `
             <p><strong>${comb}:</strong></p>
             <p>Price: ${round(totalStats.price)}</p>
@@ -149,6 +150,7 @@ function calculateUpgrades() {
             <p>Range: ${round(totalStats.range)}</p>
             <p>Damage: ${round(totalStats.damage)}</p>
             <p>Cooldown: ${round(totalStats.cooldown)}</p>
+            <p>Splash Radius: ${round(totalStats.splash)}</p>
             <hr>
             `;
         }
@@ -162,7 +164,8 @@ function calculateUpgrades() {
             totalPrice: round(totalStats.price),
             range: round(totalStats.range),
             damage: round(totalStats.damage),
-            cooldown: round(totalStats.cooldown)
+            cooldown: round(totalStats.cooldown),
+            splash: round(totalStats.splash)
         });
     });
 
@@ -177,7 +180,8 @@ function exportFile() {
         text += `  Price: ${round(stats.price)}\n`;
         text += `  Range: ${round(stats.range)}\n`;
         text += `  Damage: ${round(stats.damage)}\n`;
-        text += `  Cooldown: ${round(stats.cooldown)}\n\n`;
+        text += `  Cooldown: ${round(stats.cooldown)}\n`;
+        text += `  Splash: ${round(stats.splash)}\n\n`;
     });
 
     const blob = new Blob([text], { type: 'text/plain' });
@@ -188,8 +192,6 @@ function exportFile() {
     link.click();
     URL.revokeObjectURL(url);
 }
-
-const fileInput = document.getElementById("fileInput");
 
 function importFile() {
     const file = fileInput.files[0];
@@ -206,7 +208,7 @@ function importFile() {
 
         lines.forEach(line => {
             const matchUpgrade = line.match(/^(\d-\d):$/);
-            const matchStat = line.match(/^\s+(Price|Range|Damage|Cooldown):\s+([\d.]+)/);
+            const matchStat = line.match(/^\s+(Price|Range|Damage|Cooldown|Splash):\s+([\d.]+)/);
 
             if (matchUpgrade) {
                 currentUpgrade = matchUpgrade[1];
